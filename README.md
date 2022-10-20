@@ -2,7 +2,12 @@
  
 This project shows how to implement a simple Nextflow plugin named `nf-hello` which intercepts workflow execution events to print a message when the execution starts and on workflow completion.
 
-The `nf-hello` plugin also enriches the `channel` object with a `producer` and `consumer` method (`sayHello` and `goodbye`) which can be used in a pipeline script.
+The `nf-hello` plugin also enriches the `channel` object with a `producer` and `consumer` method (`reverse` and `goodbye`) which can be used in a pipeline script.
+
+Also exposes some @FunctionS to be used in the pipeline as custom methods 
+
+   NOTE: this repo uses the name `nf-hello` as root name. In case you want to use this repo as starting point for 
+your plugin, you need, at least, change `settings.gradle` and rename `plugins/nf-hello` folder
 
 ## Plugin Assets
                     
@@ -55,29 +60,13 @@ Run the following command in the project root directory (ie. where the file `set
 
 ## Testing and debugging
 
-To run and test the plugin in a development environment, configure a local Nextflow build with the following steps:
+There are several tests you can use under `plugins/nf-hello/src/test` folder. You can also test yours DSL (see `HelloDslTest.groovy`) !!!
 
-1. Clone the Nextflow repository in your computer into a sibling directory:
-    ```bash
-    git clone --depth 1 https://github.com/nextflow-io/nextflow ../nextflow
-    ```
-  
-2. Configure the plugin build to use the local Nextflow code:
-    ```bash
-    echo "includeBuild('../nextflow')" >> settings.gradle
-    ```
-  
-   (Make sure to not add it more than once!)
+Once tested you can try your plugin in a nextflow sesion:
 
-3. Compile the plugin alongside the Nextflow code:
-    ```bash
-    ./gradlew compileGroovy
-    ```
-
-4. Run Nextflow with the plugin, using `./launch.sh` as a drop-in replacement for the `nextflow` command, and adding the option `-plugins nf-hello` to load the plugin:
-    ```bash
-    ./launch.sh run nextflow-io/hello -plugins nf-hello
-    ```
+1. generate required artifacts with `make buildPlugins`
+2. copy build/plugins/your-plugin to $HOME/.nextflow/plugins
+3. create a pipeline with your plugin and see in action via `nextflow run ./my-pipeline.nf` 
 
 ## Package, upload and publish
 

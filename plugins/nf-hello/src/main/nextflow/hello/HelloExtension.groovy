@@ -9,7 +9,9 @@ import nextflow.Session
 import nextflow.extension.CH
 import nextflow.NF
 import nextflow.extension.DataflowHelper
+import nextflow.plugin.extension.Factory
 import nextflow.plugin.extension.Function
+import nextflow.plugin.extension.Operator
 import nextflow.plugin.extension.PluginExtensionPoint
 
 import java.util.concurrent.CompletableFuture
@@ -27,12 +29,27 @@ class HelloExtension extends PluginExtensionPoint{
     private Session session
 
     /*
+     * A Custom config extracted from nextflow.config under hello tag
+     * nextflow.config
+     * ---------------
+     * docker{
+     *   enabled = true
+     * }
+     * ...
+     * hello{
+     *    prefix = 'Mrs'
+     * }
+     */
+     private HelloConfig config
+
+    /*
      * nf-core initializes the plugin once loaded and session is ready
      * @param session
      */
     @Override
     protected void init(Session session) {
         this.session = session
+        this.config = new HelloConfig(session.config?.navigate('hello') as Map)
     }
 
     /*
@@ -47,6 +64,7 @@ class HelloExtension extends PluginExtensionPoint{
      *
      * business logic can write into the channel once ready and values will be consumed from it
      */
+    @Factory
     DataflowWriteChannel reverse(String message) {
         createReverseChannel(message)
     }
@@ -68,6 +86,7 @@ class HelloExtension extends PluginExtensionPoint{
     *
     * in this case `goodbye` will consume a message and will store it as an upper case
     */
+    @Operator
     DataflowWriteChannel goodbye(DataflowReadChannel source) {
         final target = CH.createBy(source)
         final next = {
@@ -83,12 +102,13 @@ class HelloExtension extends PluginExtensionPoint{
 
     protected DataflowWriteChannel createReverseChannel(final String message){
         final channel = CH.create()
+        String send = "$config.prefix $message"
         if( NF.isDsl2() ){
             session.addIgniter { ->
-                businessLogicHere(channel, message)
+                businessLogicHere(channel, send)
             }
         }else{
-            businessLogicHere(channel, message)
+            businessLogicHere(channel, send)
         }
         channel
     }

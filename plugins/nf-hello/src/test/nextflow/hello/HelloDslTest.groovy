@@ -57,9 +57,9 @@ class HelloDslTest extends Dsl2Spec{
             channel.reverse('hi!') 
             '''
         and:
-        def result = new MockScriptRunner([:]).setScript(SCRIPT).execute()
+        def result = new MockScriptRunner([hello:[prefix:'>>']]).setScript(SCRIPT).execute()
         then:
-        result.val == '!ih'
+        result.val == '>> hi!'.reverse()
         result.val == Channel.STOP
     }
 

@@ -24,7 +24,7 @@ class ChannelExtensionHelloTest extends Specification{
         def result = helloExtension.reverse("Hi")
 
         then:
-        result.val == 'iH'
+        result.val == 'Mr. Hi'.reverse()
         result.val == Channel.STOP
     }
 
