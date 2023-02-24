@@ -78,7 +78,12 @@ To run and test the plugin in for development purpose, configure a local Nextflo
     ./gradlew compileGroovy
     ```
 
-4. Run Nextflow with the plugin, using `./launch.sh` as a drop-in replacement for the `nextflow` command, and adding the option `-plugins nf-hello` to load the plugin:
+4. Generate nextflow `.launch.classpath`:
+    ```bash
+    cd ../nextflow && ./gradlew exportClasspath && cd ../nf-hello
+    ```
+
+5. Run Nextflow with the plugin, using `./launch.sh` as a drop-in replacement for the `nextflow` command, and adding the option `-plugins nf-hello` to load the plugin:
     ```bash
     ./launch.sh run nextflow-io/hello -plugins nf-hello
     ```
