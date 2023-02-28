@@ -88,7 +88,7 @@ To run and test the plugin in for development purpose, configure a local Nextflo
 The plugin can be tested without using a local Nextflow build using those steps:
 
 1. generate required artifacts with `make buildPlugins`
-2. copy build/plugins/your-plugin to `$HOME/.nextflow/plugins`
+2. copy build/plugins/your-plugin to `/.nextflow/plugins`
 3. create a pipeline with your plugin and see in action via `nextflow run ./my-pipeline-script.nf`
 
 ## Package, upload and publish
