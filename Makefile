@@ -1,4 +1,3 @@
-
 config ?= compileClasspath
 
 ifdef module 
@@ -53,7 +52,6 @@ assemble:
 
 #
 # generate build zips under build/plugins
-# you can install the plugin copying manually these files to $HOME/.nextflow/plugins
 #
 buildPlugins:
 	./gradlew copyPluginZip
@@ -70,3 +68,9 @@ upload-plugins:
 
 publish-index:
 	./gradlew plugins:publishIndex
+
+#
+# Install plugin to ~/.nextflow/plugins using Gradle
+#
+install-plugin:
+	./gradlew installPlugin
