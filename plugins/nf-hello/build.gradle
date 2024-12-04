@@ -78,10 +78,43 @@ dependencies {
     modules {
         module("commons-logging:commons-logging") { replacedBy("org.slf4j:jcl-over-slf4j") }
     }
+
+    // Add this line to explicitly declare the test framework launcher
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 // use JUnit 5 platform
 test {
     useJUnitPlatform()
+}
+
+// Task to install the plugin to the Nextflow plugins directory
+task installPlugin(type: Copy, dependsOn: copyPluginZip) {
+    def pluginsDir = System.getenv('NXF_PLUGINS_DIR') ?:
+                     System.getenv('NXF_HOME') ? "${System.getenv('NXF_HOME')}/plugins" :
+                     "${System.getProperty('user.home')}/.nextflow/plugins"
+    
+    def pluginZip = file("$rootProject.buildDir/plugins/${project.name}-${project.version}.zip")
+    def pluginDir = file("$pluginsDir/${project.name}-${project.version}")
+
+    doFirst {
+        println "Installing plugin to: $pluginDir"
+        pluginDir.mkdirs()
+    }
+
+    from zipTree(pluginZip)
+    into pluginDir
+
+    doLast {
+        println "Plugin installed successfully!"
+        println "Installation location determined by:"
+        if (System.getenv('NXF_PLUGINS_DIR')) {
+            println " - NXF_PLUGINS_DIR environment variable"
+        } else if (System.getenv('NXF_HOME')) {
+            println " - NXF_HOME environment variable"
+        } else {
+            println " - Default location (~/.nextflow/plugins)"
+        }
+    }
 }
 
