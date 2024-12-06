@@ -71,6 +71,11 @@ publish-index:
 
 #
 # Install plugin to ~/.nextflow/plugins using Gradle
+# Usage: make install-plugin [plugin=nf-hello]
 #
 install-plugin:
-	./gradlew installPlugin
+ifdef plugin
+	./gradlew installSpecificPlugin -Pplugin=${plugin}
+else
+	./gradlew installPlugins
+endif
