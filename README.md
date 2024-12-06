@@ -108,10 +108,10 @@ The plugin can be tested without using a local Nextflow build using the followin
    Alternatively, you can use Gradle commands directly:
    ```bash
    # Install a specific plugin
-   ./gradlew installSpecificPlugin -Pplugin=nf-hello
+   ./gradlew :plugins:nf-hello:installPlugin
 
    # Install all plugins
-   ./gradlew installPlugins
+   ./gradlew installPlugin
    ```
 
 3. Create a pipeline that uses your plugin and run it: `nextflow run ./my-pipeline-script.nf`

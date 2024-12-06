@@ -75,7 +75,7 @@ publish-index:
 #
 install-plugin:
 ifdef plugin
-	./gradlew installSpecificPlugin -Pplugin=${plugin}
+	./gradlew :plugins:${plugin}:installPlugin
 else
-	./gradlew installPlugins
+	./gradlew installPlugin
 endif
