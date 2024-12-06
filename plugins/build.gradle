@@ -153,6 +153,44 @@ subprojects {
     }
     
     task upload(dependsOn: [uploadPlugin] ) { }
+
+    /*
+     * Task to install plugin to the Nextflow plugins directory for local testing and development.
+     * For production deployment, see "Package, upload, and publish" section in README.md.
+     */
+    task installPlugin(type: Copy, dependsOn: copyPluginZip) {
+        description = "Installs ${project.name} plugin to the Nextflow plugins directory"
+        group = 'Plugin Installation'
+
+        def pluginsDir = System.getenv('NXF_PLUGINS_DIR') ?:
+                        System.getenv('NXF_HOME') ? "${System.getenv('NXF_HOME')}/plugins" :
+                        "${System.getProperty('user.home')}/.nextflow/plugins"
+        
+        // Use the subproject's name and version
+        def pluginZip = file("$rootProject.buildDir/plugins/${project.name}-${project.version}.zip")
+        def pluginDir = file("$pluginsDir/${project.name}-${project.version}")
+
+        doFirst {
+            println "Installing plugin ${project.name} version ${project.version} to: $pluginDir"
+            pluginDir.mkdirs()
+        }
+
+        from zipTree(pluginZip)
+        into pluginDir
+
+        doLast {
+            println "Plugin ${project.name} installed successfully!"
+            println "Installation location: $pluginDir"
+            println "Installation location determined by:"
+            if (System.getenv('NXF_PLUGINS_DIR')) {
+                println " - NXF_PLUGINS_DIR environment variable"
+            } else if (System.getenv('NXF_HOME')) {
+                println " - NXF_HOME environment variable"
+            } else {
+                println " - Default location (~/.nextflow/plugins)"
+            }
+        }
+    }
 }
 
 /*
@@ -175,4 +213,35 @@ task publishIndex( type: io.nextflow.gradle.tasks.GithubRepositoryPublisher ) {
     githubUser = github_username
     githubEmail = github_commit_email
     githubToken = github_access_token
+}
+
+/*
+ * Task to install all plugins to the Nextflow plugins directory
+ */
+task installPlugins() {
+    description = 'Installs all plugins to the Nextflow plugins directory'
+    group = 'Plugin Installation'
+    
+    dependsOn subprojects.installPlugin
+}
+
+/*
+ * Task to install a specific plugin by name
+ * Usage: ./gradlew installPlugin -Pplugin=nf-hello
+ */
+task installSpecificPlugin {
+    description = 'Installs a specific plugin (specify with -Pplugin=plugin-name)'
+    group = 'Plugin Installation'
+    
+    doFirst {
+        if (!project.hasProperty('plugin')) {
+            throw new GradleException("Please specify a plugin name using -Pplugin=plugin-name")
+        }
+        def pluginName = project.property('plugin')
+        def pluginProject = project.findProject(":plugins:${pluginName}")
+        if (!pluginProject) {
+            throw new GradleException("Plugin '${pluginName}' not found")
+        }
+        dependsOn pluginProject.installPlugin
+    }
 }

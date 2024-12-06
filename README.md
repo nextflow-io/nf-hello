@@ -90,7 +90,30 @@ To build and test the plugin during development, configure a local Nextflow buil
 The plugin can be tested without using a local Nextflow build using the following steps:
 
 1. Build the plugin: `make buildPlugins`
-2. Copy `build/plugins/<your-plugin>` to `$HOME/.nextflow/plugins`
+2. Install the plugin using one of these methods:
+
+   ```bash
+   # Install a specific plugin (if you have added new plugins to the plugins/ directory)
+   make install-plugin plugin=nf-hello
+
+   # Install all available plugins
+   make install-plugin
+   ```
+
+   The plugins will be installed to one of these locations, in order of precedence:
+   - Directory specified by `NXF_PLUGINS_DIR` environment variable
+   - `$NXF_HOME/plugins` if `NXF_HOME` is set
+   - `$HOME/.nextflow/plugins` (default location)
+
+   Alternatively, you can use Gradle commands directly:
+   ```bash
+   # Install a specific plugin
+   ./gradlew installSpecificPlugin -Pplugin=nf-hello
+
+   # Install all plugins
+   ./gradlew installPlugins
+   ```
+
 3. Create a pipeline that uses your plugin and run it: `nextflow run ./my-pipeline-script.nf`
 
 ## Package, upload, and publish
