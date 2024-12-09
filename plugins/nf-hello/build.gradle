@@ -78,6 +78,9 @@ dependencies {
     modules {
         module("commons-logging:commons-logging") { replacedBy("org.slf4j:jcl-over-slf4j") }
     }
+
+    // Add this line to explicitly declare the test framework launcher
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 // use JUnit 5 platform
