@@ -215,33 +215,3 @@ task publishIndex( type: io.nextflow.gradle.tasks.GithubRepositoryPublisher ) {
     githubToken = github_access_token
 }
 
-/*
- * Task to install all plugins to the Nextflow plugins directory
- */
-task installPlugins() {
-    description = 'Installs all plugins to the Nextflow plugins directory'
-    group = 'Plugin Installation'
-    
-    dependsOn subprojects.installPlugin
-}
-
-/*
- * Task to install a specific plugin by name
- * Usage: ./gradlew installPlugin -Pplugin=nf-hello
- */
-task installSpecificPlugin {
-    description = 'Installs a specific plugin (specify with -Pplugin=plugin-name)'
-    group = 'Plugin Installation'
-    
-    doFirst {
-        if (!project.hasProperty('plugin')) {
-            throw new GradleException("Please specify a plugin name using -Pplugin=plugin-name")
-        }
-        def pluginName = project.property('plugin')
-        def pluginProject = project.findProject(":plugins:${pluginName}")
-        if (!pluginProject) {
-            throw new GradleException("Plugin '${pluginName}' not found")
-        }
-        dependsOn pluginProject.installPlugin
-    }
-}
