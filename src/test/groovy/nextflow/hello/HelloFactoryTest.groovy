@@ -25,11 +25,11 @@ import spock.lang.Specification
  */
 class HelloFactoryTest extends Specification {
 
-    def 'should return observer' () {
+    def 'should return observer'() {
         when:
         def result = new HelloFactory().create(Mock(Session))
         then:
-        result.size()==1
+        result.size() == 1
         result[0] instanceof HelloObserver
     }
 

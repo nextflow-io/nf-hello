@@ -1,0 +1,30 @@
+plugins {
+    id 'io.nextflow.nextflow-plugin' version '0.0.1-alpha'
+}
+
+// plugin version
+version = '0.6.0'
+
+nextflowPlugin {
+    // minimum nextflow version
+    nextflowVersion = '24.11.0-edge'
+
+    // plugin metadata
+    provider = 'nextflow'
+    className = 'nextflow.hello.HelloPlugin'
+    extensionPoints = [
+        'nextflow.hello.HelloFactory',
+        'nextflow.hello.HelloExtension'
+    ]
+
+    publishing {
+        github {
+            repository = 'nextflow-io/nf-hello'
+            userName = project.findProperty('github_username')
+            authToken = project.findProperty('github_access_token')
+            email = project.findProperty('github_commit_email')
+
+            indexUrl = 'https://github.com/nextflow-io/plugins/blob/main/plugins.json'
+        }
+    }
+}
