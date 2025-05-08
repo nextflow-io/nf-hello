@@ -1,5 +1,7 @@
 # nf-hello plugin 
- 
+
+ARCHIVED: The nf-hello plugin has been replaced by the official [Nextflow plugin template](https://github.com/nextflow-io/nf-plugin-template).
+
 This project contains a simple Nextflow plugin called `nf-hello` which provides examples of different plugin extensions:
 
 - A custom trace observer that prints a message when the workflow starts and when the workflow completes
