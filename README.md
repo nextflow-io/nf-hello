@@ -1,5 +1,8 @@
 # nf-hello plugin 
- 
+
+> [!IMPORTANT]
+> This plugin has been deprecated in favour of the new Nextflow command `nextflow plugin create` and template project [nf-plugin-template](https://github.com/nextflow-io/nf-plugin-template). 
+
 This project contains a simple Nextflow plugin called `nf-hello` which provides examples of different plugin extensions:
 
 - A custom trace observer that prints a message when the workflow starts and when the workflow completes
@@ -10,6 +13,7 @@ This project contains a simple Nextflow plugin called `nf-hello` which provides 
 NOTE: If you want to use this project as a starting point for a custom plugin, you must rename the `plugins/nf-hello` folder and update `settings.gradle` with your plugin name.
 
 See the [Nextflow documentation](https://nextflow.io/docs/latest/plugins.html) for more information about developing plugins.
+
 
 ## Plugin structure
                     
